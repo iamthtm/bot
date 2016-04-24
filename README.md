@@ -5,13 +5,13 @@ $ sudo npm init
 ```
 EXPRESS
 ```
-$ sudonpm install express --save
+$ sudo npm install express --save
 ```
 bodyParser
 ```
-$ sudonpm install body-parser 
+$ sudo npm install body-parser
 ```
 request
 ```
-$ sudonpm install request --save
+$ sudo npm install request --save
 ```
