@@ -7,13 +7,10 @@ var token = 'EAALZAkeZC9FZBcBAPYysDEBXBEnIAHCrf3QbBBucIZCwAnPObm4bOSvL17HNVWVZCg
 var num = 0
 var n = 0
 var count = 0
-
+app.use(express.static('public'))
 app.use(bodyParser.json())
 
-app.get('/', function (req, res) {
-  app.use(express.static('index.html'))
-  // res.send('Hello World!')
-})
+
 
 app.get('/webhook/', function (req, res) {
   if (req.query['hub.verify_token'] === '1234') {
@@ -29,16 +26,15 @@ app.post('/webhook/', function (req, res) {
     var sender = event.sender.id
     if (event.message && event.message.text) {
       text = event.message.text
-      var check = 2
+
       console.log(text)
       // sendTextMessage(sender, text)
       var sln = text.length
       // console.log('length : ' + sln)
       var getFunc = text.substring(0, 3)
       console.log('func : ' + getFunc)
-      if (getFunc !== 'sum' && getFunc !== 'max' && getFunc !== 'min' && getFunc !== 'avg')check = 0
+
       if (getFunc === 'sum') {
-        check = 1
         var gettext = text.substring(4, text.length)
         console.log('number : ' + gettext)
         var space = gettext.search(' ')
@@ -90,11 +86,8 @@ app.post('/webhook/', function (req, res) {
         for (var i = 0;i < num.length;i++) {
           sum += parseFloat(num[i])
         }
-        console.log('sum : ' + sum + 'avg : ' + sum / num.length)
-        sendTextMessage(sender, 'avg : ' + (sum / num.length).toFixed(2))
-      }
-      if (check === 0) {
-        sendTextMessage(sender, 'You type wrong please try again!')
+        console.log('sum : ' + sum + 'avg : ' + sum/num.length)
+        sendTextMessage(sender, 'avg : ' + sum/num.length)
       }
     }
   }
@@ -126,3 +119,4 @@ function sendTextMessage (sender, text) {
       console.log('Error: ', response.body.error)
     }
   })
+}
