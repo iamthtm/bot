@@ -40,8 +40,8 @@ app.post('/webhook/', function (req, res) {
         var number2 = parseFloat(gettext.substring(space, gettext.length))
         console.log('number1 : ' + num1 + ' number2 : ' + num2)
         var sum = number1+number2
-        console.log('Total : ' + sum)
-        sendTextMessage(sender, 'sum: ' + sum)
+        console.log('sum : ' + sum)
+        sendTextMessage(sender, 'Total: ' + sum)
       }
 
       if (getFunc === 'max') {
