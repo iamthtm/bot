@@ -1,42 +1,114 @@
 var express = require('express')
 var bodyParser = require('body-parser')
-var app = express()
 var request = require('request')
-//
-app.use(bodyParser.urlencoded({ extended: false }))
+var app = express()
+var text
+var token = 'EAALZAkeZC9FZBcBADTZCtZAmP9AClYqlh5e1mZB0vPcqPVz847IFuhfBZCkm7byTB9ZByl2iuoxwNOe1I2mEAXFZAyZBipD1MQd8ODOmIgX2j2vtM2gymmZBtnXUvZCCHy8BtrWXMNrhHoAn6yyt80mG0ZClCOYorDiRGPOX6MjesUW31ngZDZD'
+var num = 0
+var n = 0
+var count = 0
+
 app.use(bodyParser.json())
 
 app.get('/', function (req, res) {
-  res.send('hello Word')
+  app.use(express.static('index.html'))
+  // res.send('Hello World!')
 })
 
 app.get('/webhook/', function (req, res) {
-  if (req.query['hub.verify_token'] === 'ping') {
+  if (req.query['hub.verify_token'] === '1234') {
     res.send(req.query['hub.challenge'])
   }
   res.send('Error, wrong validation token')
 })
 
 app.post('/webhook/', function (req, res) {
-  messaging_events = req.body.entry[0].messaging
-  for (i = 0; i < messaging_events.length; i++) {
-    event = req.body.entry[0].messaging[i]
-    sender = event.sender.id
+  var messaging_events = req.body.entry[0].messaging
+  for (var i = 0; i < messaging_events.length; i++) {
+    var event = req.body.entry[0].messaging[i]
+    var sender = event.sender.id
     if (event.message && event.message.text) {
       text = event.message.text
-      // Handle a text message from this sender
-     console.log(text)
-      // เพิ่มเงือนไข
+      var check = 2
+      console.log(text)
+      // sendTextMessage(sender, text)
+      var sln = text.length
+      // console.log('length : ' + sln)
+      var getFunc = text.substring(0, 3)
+      console.log('func : ' + getFunc)
+      if (getFunc !== 'sum' && getFunc !== 'max' && getFunc !== 'min' && getFunc !== 'avg')check = 0
+      if (getFunc === 'sum') {
+        check = 1
+        var gettext = text.substring(4, text.length)
+        console.log('number : ' + gettext)
+        var space = gettext.search(' ')
+        var num1 = parseFloat(gettext.substring(0, space))
+        var num2 = parseFloat(gettext.substring(space, gettext.length))
+        console.log('number1 : ' + num1 + ' number2 : ' + num2)
+        var sum = num1 + num2
+        console.log('sum : ' + sum)
+        sendTextMessage(sender, 'sum : ' + sum)
+      }
 
-      sendTextMessage(sender, text)
+      if (getFunc === 'max') {
+        var gettext = text.substring(4, text.length)
+        console.log('number : ' + gettext)
+        var space = gettext.search(' ')
+        var num1 = parseFloat(gettext.substring(0, space))
+        var num2 = parseFloat(gettext.substring(space, gettext.length))
+        console.log('number1 : ' + num1 + ' number2 : ' + num2)
+        if (num1 > num2) {
+          sendTextMessage(sender, 'max : ' + num1)
+        }
+        if (num2 > num1) {
+          sendTextMessage(sender, 'max : ' + num2)
+        }
+      }
+
+      if (getFunc === 'min') {
+        var gettext = text.substring(4, text.length)
+        console.log('number : ' + gettext)
+        var space = gettext.search(' ')
+        var num1 = parseFloat(gettext.substring(0, space))
+        var num2 = parseFloat(gettext.substring(space, gettext.length))
+        console.log('number1 : ' + num1 + ' number2 : ' + num2)
+        if (num1 < num2) {
+          sendTextMessage(sender, 'min : ' + num1)
+        }
+        if (num2 < num1) {
+          sendTextMessage(sender, 'min : ' + num2)
+        }
+      }
+
+      if (getFunc === 'avg') {
+        var num = []
+        var sum = 0
+        var gettext = text.substring(4, text.length)
+        console.log('text : ' + gettext)
+        num = gettext.split(' ')
+        console.log('split : ' + num + ' len = ' + num.length)
+        for (var i = 0;i < num.length;i++) {
+          sum += parseFloat(num[i])
+        }
+        console.log('sum : ' + sum + 'avg : ' + sum / num.length)
+        sendTextMessage(sender, 'avg : ' + (sum / num.length).toFixed(2))
+      }
+      if (check === 0) {
+        sendTextMessage(sender, 'You type wrong please try again!')
+      }
     }
   }
   res.sendStatus(200)
 })
 
-var token = 'EAALZAkeZC9FZBcBADTZCtZAmP9AClYqlh5e1mZB0vPcqPVz847IFuhfBZCkm7byTB9ZByl2iuoxwNOe1I2mEAXFZAyZBipD1MQd8ODOmIgX2j2vtM2gymmZBtnXUvZCCHy8BtrWXMNrhHoAn6yyt80mG0ZClCOYorDiRGPOX6MjesUW31ngZDZD'
+app.set('port', (process.env.PORT || 5000))
+
+app.listen(app.get('port'), function () {
+  console.log('Example app listening on port ' + app.get('port') + '!')
+})
+
 function sendTextMessage (sender, text) {
-  messageData = {
+  var messageData = {
     text: text
   }
   request({
@@ -45,7 +117,7 @@ function sendTextMessage (sender, text) {
     method: 'POST',
     json: {
       recipient: {id: sender},
-      message: messageData,
+      message: messageData
     }
   }, function (error, response, body) {
     if (error) {
@@ -54,10 +126,3 @@ function sendTextMessage (sender, text) {
       console.log('Error: ', response.body.error)
     }
   })
-}
-
-app.set('port', (process.env.PORT || 3000))
-
-app.listen(app.get('port'), function () {
-  console.log('server Start at port', app.get('port'))
-})
