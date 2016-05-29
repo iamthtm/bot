@@ -4,9 +4,6 @@ var request = require('request')
 var app = express()
 var text
 var token = 'EAALZAkeZC9FZBcBAPYysDEBXBEnIAHCrf3QbBBucIZCwAnPObm4bOSvL17HNVWVZCgwHFJb9paKZABZAtZCpl5UMJzVXrMAquTQa5I7Ao16smch1V2uO6Y98i5hLzoTM5dN1S2vMQ0vRkgsihsjJmXtw684I9riXrNZCjtFZC5FSrAaAZDZD'
-var num = 0
-var n = 0
-var count = 0
 app.use(express.static('public'))
 app.use(bodyParser.json())
 
@@ -41,7 +38,7 @@ app.post('/webhook/', function (req, res) {
         console.log('number1 : ' + num1 + ' number2 : ' + num2)
         var sum = number1+number2
         console.log('Total : ' + sum)
-        sendTextMessage(sender, 'Total: ' + sum)
+        sendTextMessage(sender, 'Total : ' + sum)
       }
 
       if (getFunc === 'max') {
