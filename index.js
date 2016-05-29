@@ -7,10 +7,11 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.get('/', function (req, res) {
-  res.send('hello word')
+  res.send('hello Word')
 })
+
 app.get('/webhook/', function (req, res) {
-  if (req.query['hub.verify_token'] === 'pai') {
+  if (req.query['hub.verify_token'] === 'ping') {
     res.send(req.query['hub.challenge'])
   }
   res.send('Error, wrong validation token')
@@ -24,13 +25,17 @@ app.post('/webhook/', function (req, res) {
     if (event.message && event.message.text) {
       text = event.message.text
       // Handle a text message from this sender
-      console.log(text)
-      sendTextMessage(sender,text)
+     console.log(text)
+      // เพิ่มเงือนไข
+
+      sendTextMessage(sender, text)
     }
   }
   res.sendStatus(200)
 })
-var token = 'EAALZAkeZC9FZBcBAOfeZBZCzo44QqCB4ws7ZCCWXnsNY8d1Mooq4ZBZAXkSyFA7Q1qYNHaUB0gaCBL4AZA6KnsFXLncYjYvPaZAucpegYaIOCKGANn6MYZAW6gqcGXvNTmcdRtD00G7TEgsFDlsXomMVsCLuZBgzKgOZB7hGejv4DxzyyOgZDZD'
+
+// var token = 'CAALZAkeZC9FZBcBABAxStRty7j972oVbcPmT5kmRuS4eulcpNRfW5NjbyHdlPlEL8t46UZANsqDCJZC9eg2xZACLRIL82fHHc8W5P2BYmSqKSooN0UBVlZAnzBRicDySr9C6ZBcvPyvCC5pWB5bcjpnnSvKFtvCDXMn1JdyycBJRpDT6GLCY6czZAfIkG3dFwx8gU5PDDvhXwDgZDZD'
+var token = 'EAALZAkeZC9FZBcBAL40ifAjOVQdDGZB5IbuM34prCWd7ReJBoKP7A9BmEIKU3nqseJpj8McYrwuN6DQsi9IIwifgCkC3ujZBTHHPrGfXOvVZAR4a9dnCdLBYAZChWUMTMDQkdZBZBoZCDiqVCyZBhLy72LdqC6aqlBByFoAuQ4ZBJyISIwZDZD'
 function sendTextMessage (sender, text) {
   messageData = {
     text: text
@@ -51,9 +56,9 @@ function sendTextMessage (sender, text) {
     }
   })
 }
+
 app.set('port', (process.env.PORT || 3000))
+
 app.listen(app.get('port'), function () {
-  console.log('Server Start at port', app.get('port'))
+  console.log('server Start at port', app.get('port'))
 })
-Status API Training Shop Blog About
-© 2016 GitHub, Inc. Terms Privacy Security Contact Help
