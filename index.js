@@ -10,8 +10,6 @@ var count = 0
 app.use(express.static('public'))
 app.use(bodyParser.json())
 
-
-
 app.get('/webhook/', function (req, res) {
   if (req.query['hub.verify_token'] === '1234') {
     res.send(req.query['hub.challenge'])
